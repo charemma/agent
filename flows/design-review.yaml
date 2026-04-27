@@ -1,0 +1,126 @@
+# Design through iterative refinement: research > design > challenge > refine > delegate.
+# This is how Babis works -- not building, but designing through friction.
+# Usage: koto up design-review topic="seeds repo structure"
+version: "1"
+name: design-review
+prompt: |
+  Design and refine: {{topic}}
+
+roles:
+  researcher: { default: Minion }
+  designer: { default: Sage }
+  challenger: { default: Babis }
+  specialist: { default: Sage }
+
+flow:
+  research:
+    role: researcher
+    task: |
+      Research prior art for: {{topic}}
+
+      Search the web for existing standards, competing approaches, and
+      established patterns. Do not work from memory -- actually search.
+
+      Output format:
+      - For each finding: name, URL, one-sentence summary, relevance to our problem
+      - Group by: direct competitors, adjacent solutions, relevant standards
+      - End with: "Gaps: what I could NOT find" (this is as valuable as what you found)
+
+      If you cite something without a URL, flag it as unverified.
+
+  design:
+    role: designer
+    input: [research]
+    task: |
+      Design a solution for: {{topic}}
+
+      IMPORTANT: Do not default to the first idea that fits. The obvious structure
+      is probably one of several valid options. Your job is to explore the space,
+      not confirm the first hypothesis.
+
+      You have the research from the previous step. Use it -- don't ignore prior art.
+
+      Follow your full process:
+      1. Problem understanding (who uses this, what fails, what constraints)
+      2. Prior art analysis (from the research -- what works, what doesn't)
+      3. At least 3 structurally different options with trade-offs
+      4. Recommendation with explicit trade-offs accepted
+      5. Naming audit for every key name in your recommendation
+
+      Do NOT skip steps. Single-option proposals will be rejected.
+      If you find yourself agreeing with the most obvious approach, stop and
+      ask what you're missing.
+
+  challenge:
+    role: challenger
+    input: [research, design]
+    task: |
+      Challenge this design. Your stance: the first draft is probably wrong.
+
+      You have the research AND the design proposal. Your job:
+
+      1. **Naming check**: Go through every name in the proposal. Is it specific?
+         Would a first-time reader understand it? Could it be confused with
+         something else? Flag every generic name.
+
+      2. **Scalability check**: What happens at 10x scale? 100x? Does the
+         structure still work with 50 agents, 30 flows, 100 rules?
+
+      3. **System surface check**: How does this interact with koto.yaml,
+         CLI resolution, audit output? Are there surprises?
+
+      4. **Prior art check**: Did the designer actually USE the research?
+         Or did they design in a vacuum despite having data?
+
+      5. **Missing options**: Is there a 4th approach nobody considered?
+
+      Output format:
+
+      ### Naming issues
+      [field: problem, suggestion]
+
+      ### Structural issues
+      [what breaks, when, why]
+
+      ### Missing considerations
+      [what wasn't addressed]
+
+      ### Verdict
+      REWORK | REFINE | ACCEPT
+      [if REWORK/REFINE: specific changes needed, ranked by impact]
+
+      If you find nothing to challenge, you haven't looked hard enough.
+      Re-read the design and the research. What assumptions went unquestioned?
+
+  refine:
+    role: designer
+    input: [design, challenge]
+    task: |
+      Refine your design based on the challenge feedback.
+
+      Do NOT defend your original proposal unless you have new evidence.
+      Do NOT ignore feedback items -- address each one explicitly.
+
+      For each challenge point:
+      - Accepted: what you changed and why
+      - Rejected: why the feedback doesn't apply (with reasoning)
+      - Partially accepted: what you took and what you left
+
+      Output the refined design in the same format as your original,
+      with a "Changes from v1" section at the top.
+
+  delegate:
+    role: specialist
+    input: [refine]
+    print_output: true
+    task: |
+      The design is finalized. Create an implementation plan.
+
+      For each deliverable in the refined design:
+      - What needs to be created/changed (specific files)
+      - Who should do it (which agent role)
+      - Dependencies between deliverables
+      - Acceptance criteria (how do we know it's done)
+
+      Output as a numbered task list, ordered by dependency.
+      Do NOT implement anything -- just plan.
