@@ -24,7 +24,7 @@ Good for: API/schema design, multi-agent setup architecture, naming reviews, dec
 
 Less good for: pure code implementation (delegated to specialists), code or text review of others' work (better suited: a dedicated reviewer agent), shortcuts without design thinking, "good enough" tasks.
 
-With the right overlays (kuromaku #364), the persona can be reused for adjacent domains -- e.g. writing cover letters (see `charemma/cv` where `senior-cover-letter` + `customer-anonymization` rules are layered on top of the Babis baseline).
+The persona can be customized per project to fit adjacent domains -- for example, layering writing-style rules on top of the same Babis baseline to draft application letters or technical proposals, without forking the agent.
 
 ## What's in here
 
