@@ -68,7 +68,7 @@ roles:
         - my-project-specific-rule
 ```
 
-Kuromaku merges seeds in declaration order. Local `.kuro/` wins, then this seed, then upstream seeds. Overlays (kuromaku #364) let a project extend the seed agent with extra rules without copying the full agent file.
+Kuromaku merges seeds in declaration order. Local `.kuro/` wins, then this seed, then upstream seeds. The `overlays:` block extends the seed agent with project-specific rules -- no need to fork or copy the agent file.
 
 ## See also
 
