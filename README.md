@@ -33,7 +33,7 @@ agents/
   Babis.yaml          # personal agent persona -- Senior Design Engineer / AI Team Orchestrator
 flows/
   design-review.yaml  # personal review flow
-rules/                # rule library
+rules/                # rule library (general working principles)
   ai-engineering.md
   clean-code.md
   code-review.md
@@ -45,9 +45,15 @@ rules/                # rule library
   knowledge-ops.md
   naming-discipline.md
   quality-bar.md
-  rust-developer.md
-  yaml-schema.md
 ```
+
+## Philosophy
+
+Keep the agent small and identity-focused. Layer domain skills on top via additional seeds -- don't bake them into the personal seed.
+
+Rules in here cover Babis's general working principles: design rigor, naming discipline, clean code, knowledge ops, git workflow, quality bar. They follow him into any project.
+
+Language-specific or tool-specific skills (Rust idioms, YAML schema patterns, LaTeX build conventions, etc.) belong in their own seeds and are added via the seed cascade or per-project overlays. This way the personal agent stays portable, while project-specific work picks up the skills it needs from the right place.
 
 ## Use it from another repo
 
